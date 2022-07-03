@@ -1,5 +1,12 @@
+//importation package http de node.js
 const http = require('http');
+//j'importe app.js
 const app = require('./app');
+
+
+//package dotenv variables d'environnement
+const dotenv = require('dotenv');
+const result = dotenv.config();
 
 //normalizePort renvoie un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaîne ;
 const normalizePort = val => {
@@ -13,8 +20,8 @@ const normalizePort = val => {
   }
   return false;
 };
-const port = normalizePort(process.env.PORT || '3000');//soit la variable d'environnement du port grâce à process.env.PORT : si la plateforme de déploiement propose un port par défaut, c'est celui-ci qu'on écoutera ;soit le port 3000, ce qui nous servira dans le cas de notre plateforme de développement
-// nodemon server . Il surveillera les modifications de vos fichiers et redémarrera le serveur lorsqu'il aura besoin d'être mis à jour. Cela vous garantit d'avoir toujours la dernière version de votre serveur dès que vous sauvegardez, sans devoir relancer manuellement le serveur ! Vous n'aurez qu'à relancer la requête vers votre serveur.
+//définition du port
+const port = normalizePort(process.env.PORT);
 app.set('port', port);
 
 const errorHandler = error => {//errorHandler  recherche les différentes erreurs et les gère de manière appropriée. Elle est ensuite enregistrée dans le serveur ;
@@ -36,7 +43,7 @@ const errorHandler = error => {//errorHandler  recherche les différentes erreur
       throw error;
   }
 };
-
+//fonction appelée à chaque requête retourne nouvelle instance du server
 const server = http.createServer(app);
 
 server.on('error', errorHandler);
