@@ -1,10 +1,10 @@
-/*const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const User = require('../models/User');//on importe notre model User
 const jwt = require('jsonwebtoken');
 
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10)//hash mdp nous appelons la fonction de hachage de bcrypt dans notre mot de passe et lui demandons de « saler » le mot de passe 10 fois. Plus la valeur est élevée, plus l'exécution de la fonction sera longue, et plus le hachage sera sécurisé. Pour plus d'informations, consultez la documentation de bcrypt  ///////////////////////////il s'agit d'une fonction asynchrone qui renvoie une Promise dans laquelle nous recevons le hash généré ;
-        .then(hash => {//dans notre bloc then , nous créons un utilisateur et l'enregistrons dans la base de données, en renvoyant une réponse de réussite en cas de succès, et des erreurs avec le code d'erreur en cas d'échec. 
+    bcrypt.hash(req.body.password, 10)//
+        .then(hash => {
         const user = new User({
             email: req.body.email,
             password: hash
@@ -42,4 +42,4 @@ exports.signup = (req, res, next) => {
                     .catch(error => res.status(500).json({ error }));
             })
             .catch(error => res.status(500).json({ error }));
-     };*/
+     };

@@ -1,4 +1,4 @@
-/*const multer = require('multer');
+const multer = require('multer');
 
 const MIME_TYPES = {
   'image/jpg': 'jpg',
@@ -20,4 +20,4 @@ const storage = multer.diskStorage({//Nous créons une constante storage , à pa
 module.exports = multer({storage: storage}).single('image');
 //Nous exportons ensuite l'élément multer entièrement configuré, lui passons notre constante storage et lui indiquons que nous gérerons uniquement les téléchargements de fichiers image.
 //a méthode single()  crée un middleware qui capture les fichiers d'un certain type (passé en argument), et les enregistre au système de fichiers du serveur à l'aide du storage configuré.
-//pouvoir appliquer notre middleware à nos routes stuff , nous devrons les modifier quelque peu, car la structure des données entrantes n'est pas tout à fait la même avec des fichiers et des données JSON.*/
+//pouvoir appliquer notre middleware à nos routes stuff , nous devrons les modifier quelque peu, car la structure des données entrantes n'est pas tout à fait la même avec des fichiers et des données JSON.

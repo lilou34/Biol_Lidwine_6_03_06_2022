@@ -1,4 +1,4 @@
-/*const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
  
 module.exports = (req, res, next) => {
    try {//Étant donné que de nombreux problèmes peuvent se produire, nous insérons tout à l'intérieur d'un bloc try...catch.
@@ -15,4 +15,4 @@ module.exports = (req, res, next) => {
    } catch(error) {
        res.status(401).json({ error });
    }
-};*/
+};
