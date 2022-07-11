@@ -23,7 +23,7 @@ schemaMDP
 
 
 exports.signup = (req, res, next) => {
-    const emailCrypt = cryptoJs.HmacSHA256(req.body.email, "CLE_EMAIL").toString();//crypt email
+    const emailCrypt = cryptoJs.HmacSHA256(req.body.email, '${process.env.CLE_EMAIL}').toString();//crypt email
 
     if(!emailValidator.validate(req.body.email)) {
         throw  "Adresse email invalide !" 
