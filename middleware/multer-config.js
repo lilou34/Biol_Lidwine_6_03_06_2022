@@ -16,6 +16,15 @@ const storage = multer.diskStorage({//Nous créons une constante storage , à pa
     callback(null, name + Date.now() + '.' + extension);
   }
 });
+//s'assurer que l'user envoi bien un fichier image
+const fileFilter = (req, file, callback) => {
+  const extension = MIME_TYPES[file.mimetype]; // Fiding the uploaded file's mine type
+  if (extension === "jpg" || extension === "png") {
+    callback(null, true); // Making sure it is a png or a jpg
+  } else {
+    callback("Erreur : Mauvais type de fichier", false);
+  }
+};
 
 module.exports = multer({storage: storage}).single('image');
 //Nous exportons ensuite l'élément multer entièrement configuré, lui passons notre constante storage et lui indiquons que nous gérerons uniquement les téléchargements de fichiers image.

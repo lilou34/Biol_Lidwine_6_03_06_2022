@@ -1,18 +1,20 @@
 //importation package
 const express = require('express');
-
 const mongoose = require('mongoose');
 
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauces');
 
-const path = require('path');//accéder au path de notre serveur
-//package dotenv variables d'environnement
-const dotenv = require('dotenv');
-const result = dotenv.config();
+const path = require('path');//accéder au path (chemin) de notre serveur
+
 //créer express
 const app = express();
 
+//////////////sécutité/////////////////////////////////////
+const dotenv = require("dotenv").config();//package dotenv variables d'environnement
+const helmet = require("helmet");// helmet sécurise les headers
+
+app.use(helmet())
 
 
 //connect mangoose mondoDB atlas
@@ -27,6 +29,7 @@ app.use(express.json());//intercepte req qui ont un content type json et met a d
 //header requête
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
@@ -35,7 +38,7 @@ app.use((req, res, next) => {
 
 app.use('/api/auth', userRoutes);//racine lié à l'auth et on passe userRoutes*/
 app.use('/api/sauces', sauceRoutes)
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(path.join(__dirname, '/images')));
 //indique à Express qu'il faut gérer la ressource images de manière statique (un sous-répertoire de notre répertoire de base, __dirname) à chaque fois qu'elle reçoit une requête vers la route /images
 //exportation app.js
 module.exports = app;
