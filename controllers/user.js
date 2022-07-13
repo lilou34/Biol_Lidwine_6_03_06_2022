@@ -7,23 +7,21 @@ const passwordValidator = require("password-validator");
 //chiffrage email
 const cryptoJs = require("crypto-js");
 
-
-
 // Creation schema passwordValidator
 var schemaMDP = new passwordValidator();
 // Add properties to it
 schemaMDP
 .is().min(8)                                    // longueur mini 8
-.is().max(20)                                  // longueur max 100
-.has().uppercase(1)                              // min majuscule
-.has().lowercase(1)                              // min minuscule
-.has().digits(1)                                // min nombre
+.is().max(20)                                  // longueur max 20
+.has().uppercase(1)                              // min majuscule 1
+.has().lowercase(1)                              // min minuscule 1
+.has().digits(1)                                // min nombre 1
 .has().not().spaces()                           // pas d'espaces
 .is().not().oneOf(['Passw0rd', 'Password123', 'Azerty1', 'Azerty2']); // entrées interdites
 
 
 exports.signup = (req, res, next) => {
-    const emailCrypt = cryptoJs.HmacSHA256(req.body.email, '${process.env.CLE_EMAIL}').toString();//crypt email
+    const emailCrypt = cryptoJs.HmacSHA256(req.body.email, `${process.env.CLE_EMAIL}`).toString();//crypt email
 
     if(!emailValidator.validate(req.body.email)) {
         throw  "Adresse email invalide !" 
@@ -48,7 +46,8 @@ exports.signup = (req, res, next) => {
 
 
     exports.login = (req, res, next) => {//Nous utilisons notre modèle Mongoose pour vérifier que l'e-mail entré par l'utilisateur correspond à un utilisateur existant de la base de données :
-        User.findOne({ email: req.body.email })
+        const emailCrypt = cryptoJs.HmacSHA256(req.body.email, `${process.env.CLE_EMAIL}`).toString();//crypt email
+        User.findOne({ email: emailCrypt })
             .then(user => {//Dans le cas contraire, nous renvoyons une erreur401 Unauthorized
                 if (!user) {
                     return res.status(401).json({ message: 'Paire login/mot de passe incorrecte'});
