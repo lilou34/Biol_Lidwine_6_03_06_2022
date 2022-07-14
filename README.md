@@ -3,6 +3,7 @@ HOT TAKES
 Bonjour afin de voir le site suivez les instructions :
 
 /////////////FRONTEND//////////////
+
 Cloner repo Frontend à cette adresse https://github.com/OpenClassrooms-Student-Center/Web-Developer-P6
 depuis le terminal sur le dossier Frontend
 npm install -g @angular/cli
@@ -10,6 +11,7 @@ npm run start
 
 
 //////////////BACKEND//////////////
+
 depuis le terminal sur le dossier Backend
 npm install
 npm start
