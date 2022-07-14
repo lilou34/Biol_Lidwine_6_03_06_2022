@@ -33,7 +33,7 @@ PORT = 'celui que vous voulez'
 
 DB_USERNAME = "XXXXXXXXXX"
 
-DB_PASSWORD = "Xxxxxxx1"
+DB_PASSWORD = "XXXXXXXXXXX"
 
 DB_CLUSTER = "clustervous.XXXXXXXXXXX"
 
