@@ -2,6 +2,7 @@ const Sauce = require('../models/Sauce');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { response } = require('../app');
 const dotenv = require("dotenv").config();
 
 //version avec multer
@@ -31,6 +32,9 @@ exports.modifySauce = (req, res, next) => {
   if(req.file) { // Si l'image est modifiée, on supprime l'ancienne image dans /images
       Sauce.findOne({ _id: req.params.id })
           .then(sauce => {
+            if(!verifyUser(req, sauce.userId)){
+              return res.status(403).json({message : "Action non autorisée"})
+            }
               const filename = sauce.imageUrl.split('/images/')[1];
               fs.unlink(`images/${filename}`, () => {
                   const sauceObject = 
@@ -44,11 +48,17 @@ exports.modifySauce = (req, res, next) => {
               });
           });
   } else { // Si l'image n'est pas modifée
+    Sauce.findOne({ _id: req.params.id})
+    .then(sauce => {//on verifie que la sauce appartient bien à l'utilisateur avec verifyUser
+      if(!verifyUser(req, sauce.userId)){
+        return res.status(403).json({message : "Action non autorisée"})
+      }
       const sauceObject = { ...req.body } 
       Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-          .then(() => res.status(200).json({ message: 'Sauce modifiée avec succès !' }))
+          .then(() => 
+          res.status(200).json({ message: 'Sauce modifiée avec succès !' }))
           .catch(error => res.status(400).json({ error }))
-  }
+    })}
 };
 //////////////////voir toute les sauces//////////////////////
 exports.getAllSauce= (req, res, next) => {
@@ -63,11 +73,27 @@ exports.getOneSauce = (req, res, next) => {
   .catch(error => res.status(404).json({error: error}))
 };
 
+//vérifier que l'user qui modifie ou supprime la sauce en est bien l'auteur
+function verifyUser(req, userId){
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+  const tokenUserId = decodedToken.userId;
+  if(userId == tokenUserId){
+    return true
+  }else{
+    return false
+  }
+};
 ////////////////////supression sauce//////////////////////
 exports.deleteSauce = (req, res, next) => {
+
     Sauce.findOne({ _id: req.params.id }) 
       .then((sauce) => {
+        if(!verifyUser(req, sauce.userId)){//on verifie que la sauce appartient bien à l'utilisateur avec verifyUser
+          return res.status(403).json({message : "Action non autorisée"})
+        }
         const filename = sauce.imageUrl.split("/images/")[1]; // On récupère avec .split le nom ficher image dans l'URL
+        
         fs.unlink(`images/${filename}`, () => {
           Sauce.deleteOne({ _id: req.params.id })
             .then(res.status(200).json({ message: "Sauce supprimée !" }))
@@ -75,7 +101,7 @@ exports.deleteSauce = (req, res, next) => {
         });
       })
       .catch((error) => res.status(500).json({ error }));
-  };
+};
 
 /////////////like ou pas/////////
 
